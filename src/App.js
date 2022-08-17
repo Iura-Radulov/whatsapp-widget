@@ -1,26 +1,24 @@
-import { HashRouter as Router, Route, Routes } from "react-router-dom";
-import Chat from "./components/chat";
-import Settings from "./components/settings";
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+import Chat from './components/chat';
+import Settings from './components/settings';
 
-export function App(props) {
+export function App({ chat, clientid, show }) {
+  // console.log(chat);
 
-  console.log(props)
-
-  if (props.show === 'show' && props.clientid) {
-
+  if (show === 'show' && clientid) {
     return (
-      <div className="whatsappwidget">
-          <div className="flex flex-col justify-center items-center">
-              <Router>
-                  <Routes>
-                    <Route path="/chat" element={<Chat chatWindow={props.chat} clientId={props.clientid} />} />
-                    <Route exact path="/" element={<Settings clientId={props.clientid} />} />
-                  </Routes>
-              </Router>
-          </div>
+      <div className='whatsappwidget'>
+        <div className='flex flex-col justify-center items-center'>
+          <Router>
+            <Routes>
+              <Route exact path='/' element={<Settings chatWindow={chat} clientId={clientid} />} />
+              <Route path='/chat' element={<Chat chatWindow={chat} clientId={clientid} />} />
+            </Routes>
+          </Router>
+        </div>
       </div>
-    )
-  } else return <div className="whatsappwidget"></div>
+    );
+  } else return <div className='whatsappwidget'></div>;
 }
 
 export default App;
