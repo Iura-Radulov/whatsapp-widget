@@ -48,7 +48,8 @@ export function Chat({ clientId, chatWindow }) {
         });
       }
     }
-  }, [client]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatWindow, client, openChat]);
 
   const getCLient = async () => {
     const client = await axios.get(`${BASE_URL}getClient?client=${clientId}`);

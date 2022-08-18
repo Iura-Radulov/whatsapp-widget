@@ -18,26 +18,30 @@ export default function Settings({ clientId }) {
   console.log(qr);
   useEffect(() => {
     console.log('qr', qr);
-
     if (qr.length > 0) {
       getCLientInfo();
       console.log('clientInfo', clientInfo);
-
       // setShow(true);
       setLoading(false);
     }
-  }, [qr]);
-
-  useEffect(() => {
     if (!clientInfo) {
       getCLientInfo();
     }
     if (clientInfo) navigate(`/chat`);
-  }, [clientInfo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clientInfo, qr]);
+
+  // useEffect(() => {
+  //   if (!clientInfo) {
+  //     getCLientInfo();
+  //   }
+  //   if (clientInfo) navigate(`/chat`);
+  // }, [clientInfo]);
 
   useEffect(() => {
     getCLientInfo();
     // logIn();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getCLientInfo = async () => {
