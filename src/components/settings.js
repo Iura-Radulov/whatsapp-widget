@@ -8,16 +8,17 @@ import EnterInstraction from './EnterInstaction';
 export default function Settings({ clientId }) {
   const [qr, setQr] = useState(0);
   // const [show, setShow] = useState(false);
-  // const [logged, setLogged] = useState(false);
+  const [update, setUpdate] = useState(false);
   const [clientInfo, setClientInfo] = useState(false);
   const [loading, setLoading] = useState(false);
 
   let navigate = useNavigate();
 
   console.log('clientInfo', clientInfo);
-  console.log(qr);
+  // console.log(qr);
   useEffect(() => {
-    console.log('qr', qr);
+    console.log('qr-effect', qr);
+
     if (qr.length > 0) {
       getCLientInfo();
       console.log('clientInfo', clientInfo);
@@ -38,11 +39,14 @@ export default function Settings({ clientId }) {
   //   if (clientInfo) navigate(`/chat`);
   // }, [clientInfo]);
 
-  useEffect(() => {
-    getCLientInfo();
-    // logIn();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  // getCLientInfo();
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+  if (qr && !update) {
+    setTimeout(() => setUpdate(true), 60000);
+  }
 
   const getCLientInfo = async () => {
     console.log('SEARCHING', clientId);
@@ -56,10 +60,24 @@ export default function Settings({ clientId }) {
     }
   };
 
+  const onUpdate = async () => {
+    setLoading(true);
+    const qr = await axios.get(`http://localhost:8000/api/createClient?client=${clientId}`);
+    setUpdate(false);
+    // console.log('qr-onRestart', qr);
+    if (qr.data.client) {
+      navigate(`/chat`);
+    }
+    if (qr.data.qr) {
+      return setQr(qr.data.qr);
+    }
+  };
+
   const logIn = async () => {
     setLoading(true);
     const qr = await axios.get(`http://localhost:8000/api/createClient?client=${clientId}`);
-    console.log(qr);
+
+    console.log('qr-login', qr);
     if (qr.data.client) {
       navigate(`/chat`);
     }
@@ -85,12 +103,15 @@ export default function Settings({ clientId }) {
           <EnterInstraction />
           <QRCodeSVG value={qr} className='my-[30px]' />
 
-          {/* <button
-              onClick={() => getCLientInfo()}
-              className='flex items-center space-x-2 px-3 py-1 bg-green-400 font-bold rounded-lg hover:bg-green-200'>
-              {loading && svg1}
-              <p>{loading ? 'Loading...' : 'Scaned!'}</p>
-            </button> */}
+          {update && (
+            <button
+              onClick={() => onUpdate()}
+              className='flex items-center space-x-2 px-3 py-1 mb-3 bg-green-400 font-bold rounded-lg hover:bg-green-200'>
+              {loading && svgSettings}
+              <p>{loading ? 'Loading...' : 'Update!'}</p>
+            </button>
+          )}
+
           {qr ? (
             <button
               onClick={() => getCLientInfo()}
