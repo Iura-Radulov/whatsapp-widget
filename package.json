@@ -20,6 +20,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "lint:js": "eslint src/**/*.{js,jsx}",
     "build:widget": "parcel build src/index.js --no-source-maps --dist-dir widget && cp build/static/css/*.css widget/index.css",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
