@@ -14,7 +14,7 @@ const FileUploader = props => {
   };
   return (
     <>
-      <button className='absolute left-4' onClick={handleClick}>
+      <button className='absolute left-2' onClick={handleClick}>
         <img className='w-6' src={uploadFile} alt='upload file' />
       </button>
       <input

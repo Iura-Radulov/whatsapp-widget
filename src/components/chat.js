@@ -54,6 +54,9 @@ export function Chat({ clientId, chatWindow }) {
   const getCLient = async () => {
     const client = await axios.get(`${BASE_URL}getClient?client=${clientId}`);
     console.log(client);
+    if (client.data.err === 'undefined not found!') {
+      logOut();
+    }
     return setClient(client.data);
   };
 
@@ -106,7 +109,7 @@ export function Chat({ clientId, chatWindow }) {
   };
   return (
     <div className='flex py-[30px]'>
-      <div className='flex flex-col space-y-4 px-8 pb-8 pt-2 h-[auto] bg-gray-100 rounded-lg border h-screen'>
+      <div className='flex flex-col space-y-4 px-8 pb-8 pt-2 h-[auto] bg-gray-100 rounded-lg border'>
         <div className='flex items-center justify-between border-b py-4 w-60'>
           <p className='font-bold text-2xl'>Chats</p>
           <div className='flex space-x-2'>
@@ -170,7 +173,7 @@ export function Chat({ clientId, chatWindow }) {
               </button>
               <div
                 ref={messageEl}
-                className='flex flex-col space-y-2 overflow-y-auto w-96 h-[65vh] border rounded-lg p-4 bg-gray-50'>
+                className='flex flex-col space-y-2 overflow-y-auto w-[280px] h-[55vh] border rounded-lg p-4 bg-gray-50'>
                 {chatHistory.length > 0 &&
                   chatHistory.map(msg => {
                     const timestamp = Date.now();
@@ -198,14 +201,14 @@ export function Chat({ clientId, chatWindow }) {
                     }
                   })}
               </div>
-              <form onSubmit={e => postMessage(e)} className='flex relative space-x-2 items-center'>
+              <form onSubmit={e => postMessage(e)} className='flex relative items-center'>
                 <FileUploader handleFile={() => handleFile()} />
 
                 <input
-                  placeholder='Type some message here...'
+                  placeholder='Type some message ..'
                   onChange={e => setMessage(e.target.value)}
                   value={message}
-                  className='pl-8 w-full h-8 border-2 border-green-200 rounded-lg'
+                  className='pl-7 w-full h-8 border-2 border-green-200 rounded-lg'
                   type='text'
                 />
                 <button
