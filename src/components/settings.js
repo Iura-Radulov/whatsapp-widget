@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import svgSettings from '../images/svgSettings';
 import EnterInstraction from './EnterInstaction';
 
+const BASE_URL = 'http://localhost:8000/';
+
+//http://localhost:8000/
 export default function Settings({ clientId }) {
   const [qr, setQr] = useState(0);
   // const [show, setShow] = useState(false);
@@ -17,16 +20,18 @@ export default function Settings({ clientId }) {
   console.log('clientInfo', clientInfo);
   // console.log(qr);
   useEffect(() => {
+    getCLientInfo();
     console.log('qr-effect', qr);
 
-    if (qr.length > 0) {
-      getCLientInfo();
+    if (qr) {
+      // getCLientInfo();
       console.log('clientInfo', clientInfo);
       // setShow(true);
       setLoading(false);
     }
     if (!clientInfo) {
-      getCLientInfo();
+      setClientInfo(JSON.parse(localStorage.getItem('clientInfo')));
+      // getCLientInfo();
     }
     if (clientInfo) navigate(`/chat`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,19 +55,21 @@ export default function Settings({ clientId }) {
 
   const getCLientInfo = async () => {
     console.log('SEARCHING', clientId);
-    const clientInfo = await axios.get(`http://localhost:8000/api/getClient?client=${clientId}`);
+    const clientInfo = await axios.get(`${BASE_URL}api/getClient?client=${clientId}`);
     console.log(clientInfo.data);
+
     if (clientInfo.data.err === 'undefined not found!') {
       return;
     }
     if (clientInfo.data.me) {
+      localStorage.setItem('clientInfo', JSON.stringify(clientInfo.data));
       return setClientInfo(clientInfo.data);
     }
   };
 
   const onUpdate = async () => {
     setLoading(true);
-    const qr = await axios.get(`http://localhost:8000/api/createClient?client=${clientId}`);
+    const qr = await axios.get(`${BASE_URL}api/createClient?client=${clientId}`);
     setUpdate(false);
     // console.log('qr-onRestart', qr);
     if (qr.data.client) {
@@ -75,7 +82,7 @@ export default function Settings({ clientId }) {
 
   const logIn = async () => {
     setLoading(true);
-    const qr = await axios.get(`http://localhost:8000/api/createClient?client=${clientId}`);
+    const qr = await axios.get(`${BASE_URL}api/createClient?client=${clientId}`);
 
     console.log('qr-login', qr);
     if (qr.data.client) {
@@ -89,7 +96,7 @@ export default function Settings({ clientId }) {
   const logOut = async () => {
     // setShow(false);
     setClientInfo(false);
-    await axios.get(`http://localhost:8000/api/logout?client=${clientId}`);
+    await axios.get(`${BASE_URL}api/logout?client=${clientId}`);
     // return setLogged(false);
   };
 

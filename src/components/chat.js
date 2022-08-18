@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-// import { svg1, svg2, svg3 } from '../images/svgChat';
 import updateIcon from '../images/update-icon.svg';
 import logOutIcon from '../images/logout-svgrepo-com.svg';
 import returnBackIcon from '../images/return-back.svg';
+import FileUploader from './FileUploader';
 
 const BASE_URL = 'http://localhost:8000/api/';
 
@@ -41,12 +41,12 @@ export function Chat({ clientId, chatWindow }) {
         getMessages(chatId);
       }
       getChats();
-      if (messageEl) {
-        messageEl.current.addEventListener('DOMNodeInserted', event => {
-          const { currentTarget: target } = event;
-          target.scroll({ top: target.scrollHeight });
-        });
-      }
+      // if (messageEl) {
+      //   messageEl.current.addEventListener('DOMNodeInserted', event => {
+      //     const { currentTarget: target } = event;
+      //     target.scroll({ top: target.scrollHeight });
+      //   });
+      // }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatWindow, client, openChat]);
@@ -85,10 +85,18 @@ export function Chat({ clientId, chatWindow }) {
     return setChatHistory(messages.data);
   };
 
+  const handleFile = async file => {
+    const send = await axios.get(
+      `${BASE_URL}sendmessage?client=${clientId}&number=${number}&message=${file}`
+    );
+    console.log('handleFile', send.data);
+    return send.data;
+  };
   const logOut = async () => {
     // setShow(false);
     // setClientInfo(false);
     await axios.get(`${BASE_URL}logout?client=${clientId}`);
+    localStorage.removeItem('clientInfo');
     navigate('/');
   };
 
@@ -99,7 +107,7 @@ export function Chat({ clientId, chatWindow }) {
   return (
     <div className='flex py-[30px]'>
       <div className='flex flex-col space-y-4 px-8 pb-8 pt-2 h-[auto] bg-gray-100 rounded-lg border h-screen'>
-        <div className='flex items-center justify-between border-b py-4'>
+        <div className='flex items-center justify-between border-b py-4 w-60'>
           <p className='font-bold text-2xl'>Chats</p>
           <div className='flex space-x-2'>
             <button
@@ -126,7 +134,7 @@ export function Chat({ clientId, chatWindow }) {
         <div className='flex'>
           {!chatWindow && contactList && (
             <div className='flex flex-col space-y-4'>
-              <div className='flex flex-col space-y-1 mr-6 overflow-y-auto h-[76vh]'>
+              <div className='flex flex-col space-y-1 mr-6 overflow-y-auto h-[65vh]'>
                 {chats.length > 0 && (
                   <ul>
                     {chats.map(chat => (
@@ -141,7 +149,7 @@ export function Chat({ clientId, chatWindow }) {
                         }}
                         className={`${
                           currentChat === chat.id._serialized && 'bg-green-300'
-                        } cursor-pointer hover:bg-green-50 border rounded-lg px-2 py-1`}>
+                        } cursor-pointer hover:bg-green-50 border rounded-lg px-2 py-1 my-3`}>
                         {chat.name}
                       </li>
                     ))}
@@ -150,60 +158,65 @@ export function Chat({ clientId, chatWindow }) {
               </div>
             </div>
           )}
-
-          <div className='flex flex-col space-y-2'>
-            {/* {!contactList && } */}
-            <button
-              onClick={onReturnBtn}
-              className='cursor-pointer hover:bg-gray-50 flex justify-center items-center w-10 h-10 bg-white rounded-lg border'>
-              <img src={returnBackIcon} alt='log out icon' className='w-6 ' />
-            </button>
-            <div
-              ref={messageEl}
-              className='flex flex-col space-y-2 overflow-y-auto w-96 h-[70vh] border rounded-lg p-4 bg-gray-50'>
-              {chatHistory.length > 0 &&
-                chatHistory.map(msg => {
-                  const timestamp = Date.now();
-                  const date = new Intl.DateTimeFormat('ru-RU', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  }).format(timestamp);
-                  if (msg.fromMe === true) {
-                    return (
-                      <div className='bg-gray-100 text-sm self-end px-3 py-2 border rounded-lg '>
-                        {msg.body}
-                        <p className='mt-1 text-xs text-gray-400 text-end'>{date}</p>
-                      </div>
-                    );
-                  } else {
-                    return (
-                      <div className='bg-white text-sm self-start px-3 py-2 border rounded-lg'>
-                        {msg.body}
-                        <p className='mt-1 text-xs text-gray-400 text-end'>{date}</p>
-                      </div>
-                    );
-                  }
-                })}
-            </div>
-            <form onSubmit={e => postMessage(e)} className='flex space-x-2 items-center'>
-              <input
-                placeholder='Type some message here...'
-                onChange={e => setMessage(e.target.value)}
-                value={message}
-                className='px-2 py-1 w-full h-8 border-2 border-green-200 rounded-lg'
-                type='text'
-              />
-              <button
-                type='sumbit'
-                className='px-2 py-1 bg-green-300 hover:bg-green-200 rounded-lg border-2 border-white'>
-                Send
-              </button>
-            </form>
-          </div>
         </div>
+
+        {!contactList && (
+          <div className='flex items-center justify-between border-b py-4'>
+            <div className='flex flex-col space-y-2'>
+              <button
+                onClick={onReturnBtn}
+                className='cursor-pointer hover:bg-gray-50 flex justify-center items-center w-10 h-10 bg-white rounded-lg border'>
+                <img src={returnBackIcon} alt='log out icon' className='w-6 ' />
+              </button>
+              <div
+                ref={messageEl}
+                className='flex flex-col space-y-2 overflow-y-auto w-96 h-[65vh] border rounded-lg p-4 bg-gray-50'>
+                {chatHistory.length > 0 &&
+                  chatHistory.map(msg => {
+                    const timestamp = Date.now();
+                    const date = new Intl.DateTimeFormat('ru-RU', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    }).format(timestamp);
+                    if (msg.fromMe === true) {
+                      return (
+                        <div className='bg-gray-100 text-sm self-end px-3 py-2 border rounded-lg '>
+                          {msg.body}
+                          <p className='mt-1 text-xs text-gray-400 text-end'>{date}</p>
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div className='bg-white text-sm self-start px-3 py-2 border rounded-lg'>
+                          {msg.body}
+                          <p className='mt-1 text-xs text-gray-400 text-end'>{date}</p>
+                        </div>
+                      );
+                    }
+                  })}
+              </div>
+              <form onSubmit={e => postMessage(e)} className='flex relative space-x-2 items-center'>
+                <FileUploader handleFile={() => handleFile()} />
+
+                <input
+                  placeholder='Type some message here...'
+                  onChange={e => setMessage(e.target.value)}
+                  value={message}
+                  className='pl-8 w-full h-8 border-2 border-green-200 rounded-lg'
+                  type='text'
+                />
+                <button
+                  type='sumbit'
+                  className='px-2 py-1 bg-green-300 hover:bg-green-200 rounded-lg border-2 border-white'>
+                  Send
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
