@@ -7,6 +7,8 @@ import EnterInstraction from './EnterInstaction';
 
 const BASE_URL = 'https://whatsapp-widget.herokuapp.com/';
 
+// const BASE_URL = 'http://localhost:8001/';
+
 //http://localhost:8000/
 export default function Settings({ clientId }) {
   const [qr, setQr] = useState(0);
@@ -22,7 +24,7 @@ export default function Settings({ clientId }) {
   useEffect(() => {
     // getCLientInfo();
     console.log('qr-effect', qr);
-
+    console.log('clientId', clientId);
     if (qr) {
       // getCLientInfo();
       console.log('clientInfo', clientInfo);
@@ -44,11 +46,11 @@ export default function Settings({ clientId }) {
   //   if (clientInfo) navigate(`/chat`);
   // }, [clientInfo]);
 
-  // useEffect(() => {
-  // getCLientInfo();
+  useEffect(() => {
+    getCLientInfo();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   if (qr && !update) {
     setTimeout(() => setUpdate(true), 60000);
   }
@@ -57,15 +59,27 @@ export default function Settings({ clientId }) {
     console.log('SEARCHING', clientId);
     const clientInfo = await axios.get(`${BASE_URL}api/getClient?client=${clientId}`);
     console.log(clientInfo.data);
-
     if (clientInfo.data.err === 'undefined not found!') {
       return;
     }
     if (clientInfo.data.me) {
-      localStorage.setItem('clientInfo', JSON.stringify(clientInfo.data));
       return setClientInfo(clientInfo.data);
     }
   };
+
+  // const getCLientInfo = async () => {
+  //   console.log('SEARCHING', clientId);
+  //   const clientInfo = await axios.get(`${BASE_URL}api/getClient?client=${clientId}`);
+  //   console.log(clientInfo.data);
+
+  //   if (clientInfo.data.err === 'undefined not found!') {
+  //     return;
+  //   }
+  //   if (clientInfo.data.me) {
+  //     localStorage.setItem('clientInfo', JSON.stringify(clientInfo.data));
+  //     return setClientInfo(clientInfo.data);
+  //   }
+  // };
 
   const onUpdate = async () => {
     setLoading(true);

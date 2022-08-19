@@ -6,7 +6,8 @@ import logOutIcon from '../images/logout-svgrepo-com.svg';
 import returnBackIcon from '../images/return-back.svg';
 import FileUploader from './FileUploader';
 
-const BASE_URL = 'https://whatsapp-widget.herokuapp.com/api/';
+const BASE_URL = 'https://whatsapp-widget.herokuapp.com/';
+// const BASE_URL = 'https://localhost:8000/';
 
 export function Chat({ clientId, chatWindow }) {
   const [client, setClient] = useState('loading');
@@ -52,7 +53,7 @@ export function Chat({ clientId, chatWindow }) {
   }, [chatWindow, client, openChat]);
 
   const getCLient = async () => {
-    const client = await axios.get(`${BASE_URL}getClient?client=${clientId}`);
+    const client = await axios.get(`${BASE_URL}api/getClient?client=${clientId}`);
     console.log(client);
     if (client.data.err === 'undefined not found!') {
       logOut();
@@ -67,13 +68,13 @@ export function Chat({ clientId, chatWindow }) {
       getMessages(`${number}@c.us`);
     }, 1200);
     const send = await axios.get(
-      `${BASE_URL}sendmessage?client=${clientId}&number=${number}&message=${message}`
+      `${BASE_URL}api/sendmessage?client=${clientId}&number=${number}&message=${message}`
     );
     return send.data;
   };
 
   const getChats = async () => {
-    const chats = await axios.get(`${BASE_URL}getChats?client=${clientId}`);
+    const chats = await axios.get(`${BASE_URL}api/getChats?client=${clientId}`);
     console.log(chatWindow);
     if (chats.data.err === 'server error') {
       logOut();
@@ -84,13 +85,15 @@ export function Chat({ clientId, chatWindow }) {
 
   const getMessages = async chatId => {
     // console.log(chatId);
-    const messages = await axios.get(`${BASE_URL}getmessages?client=${clientId}&chatId=${chatId}`);
+    const messages = await axios.get(
+      `${BASE_URL}api/getmessages?client=${clientId}&chatId=${chatId}`
+    );
     return setChatHistory(messages.data);
   };
 
   const handleFile = async file => {
     const send = await axios.get(
-      `${BASE_URL}sendmessage?client=${clientId}&number=${number}&message=${file}`
+      `${BASE_URL}api/sendmessage?client=${clientId}&number=${number}&message=${file}`
     );
     console.log('handleFile', send.data);
     return send.data;
@@ -98,7 +101,7 @@ export function Chat({ clientId, chatWindow }) {
   const logOut = async () => {
     // setShow(false);
     // setClientInfo(false);
-    await axios.get(`${BASE_URL}logout?client=${clientId}`);
+    await axios.get(`${BASE_URL}api/logout?client=${clientId}`);
     localStorage.removeItem('clientInfo');
     navigate('/');
   };
