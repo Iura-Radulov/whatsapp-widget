@@ -1,7 +1,7 @@
 {
   "name": "wawidget",
   "version": "0.1.0",
-  "homepage": "https://whatsapp-widget/",
+  "homepage": "https://iura-radulov.github.io/whatsapp-widget/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.0",
