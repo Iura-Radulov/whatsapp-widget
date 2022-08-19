@@ -20,7 +20,7 @@ export default function Settings({ clientId }) {
   console.log('clientInfo', clientInfo);
   // console.log(qr);
   useEffect(() => {
-    getCLientInfo();
+    // getCLientInfo();
     console.log('qr-effect', qr);
 
     if (qr) {
