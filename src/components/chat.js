@@ -6,7 +6,7 @@ import logOutIcon from '../images/logout-svgrepo-com.svg';
 import returnBackIcon from '../images/return-back.svg';
 import FileUploader from './FileUploader';
 
-const BASE_URL = 'http://localhost:8000/api/';
+const BASE_URL = 'https://whatsapp-widget.herokuapp.com/api/';
 
 export function Chat({ clientId, chatWindow }) {
   const [client, setClient] = useState('loading');

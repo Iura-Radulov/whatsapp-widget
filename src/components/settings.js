@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import svgSettings from '../images/svgSettings';
 import EnterInstraction from './EnterInstaction';
 
-const BASE_URL = 'http://localhost:8000/';
+const BASE_URL = 'https://whatsapp-widget.herokuapp.com/';
 
 //http://localhost:8000/
 export default function Settings({ clientId }) {
