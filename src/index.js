@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 
-const root = ReactDOM.createRoot(document.querySelector('.whatsappwidget'));
-const widget = document.querySelector('.whatsappwidget');
+const root = ReactDOM.createRoot(document.querySelector('.root'));
+const widget = document.querySelector('.root');
 root.render(
   <React.StrictMode>
     {/* <BrowserRouter basename='/whatsapp-widget'> */}
