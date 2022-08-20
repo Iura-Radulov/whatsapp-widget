@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
+
 import updateIcon from '../images/update-icon.svg';
 import logOutIcon from '../images/logout-svgrepo-com.svg';
 import returnBackIcon from '../images/return-back.svg';
 import FileUploader from './FileUploader';
 
-const BASE_URL = 'https://whatsapp-widget.herokuapp.com/';
-// const BASE_URL = 'https://localhost:8000/';
+// const BASE_URL = 'https://whatsapp-widget.herokuapp.com/';
+const BASE_URL = 'http://localhost:8001/';
 
 export function Chat({ clientId, chatWindow }) {
   const [client, setClient] = useState('loading');
@@ -113,8 +116,10 @@ export function Chat({ clientId, chatWindow }) {
   return (
     <div className='flex py-[30px]'>
       <div className='flex flex-col space-y-4 px-8 pb-8 pt-2 h-[auto] bg-gray-100 rounded-lg border'>
-        <div className='flex items-center justify-between border-b py-4 w-60'>
-          <p className='font-bold text-2xl'>Chats</p>
+        <div className='flex items-center justify-between border-b py-4 w-50'>
+          {!chatWindow && contactList && <p className='font-bold text-2xl'>Names</p>}
+          {!contactList && <p className='font-bold text-2xl'>Chats</p>}
+
           <div className='flex space-x-2'>
             <button
               onClick={() => getChats()}
@@ -140,7 +145,7 @@ export function Chat({ clientId, chatWindow }) {
         <div className='flex'>
           {!chatWindow && contactList && (
             <div className='flex flex-col space-y-4'>
-              <div className='flex flex-col space-y-1 mr-6 overflow-y-auto h-[65vh]'>
+              <div className='flex flex-col space-y-1 overflow-y-auto h-[65vh]'>
                 {chats.length > 0 && (
                   <ul>
                     {chats.map(chat => (
@@ -167,7 +172,7 @@ export function Chat({ clientId, chatWindow }) {
         </div>
 
         {!contactList && (
-          <div className='flex items-center justify-between border-b py-4'>
+          <div className='flex items-center justify-between border-b'>
             <div className='flex flex-col space-y-2'>
               <button
                 onClick={onReturnBtn}
@@ -214,11 +219,18 @@ export function Chat({ clientId, chatWindow }) {
                   className='pl-7 w-full h-8 border-2 border-green-200 rounded-lg'
                   type='text'
                 />
-                <button
+
+                <Button
+                  size='small'
+                  type='sumbit'
+                  sx={{ minWidth: 40, marginLeft: 1 }}
+                  variant='contained'
+                  endIcon={<SendIcon />}></Button>
+                {/* <button
                   type='sumbit'
                   className='px-2 py-1 bg-green-300 hover:bg-green-200 rounded-lg border-2 border-white'>
                   Send
-                </button>
+                </button> */}
               </form>
             </div>
           </div>

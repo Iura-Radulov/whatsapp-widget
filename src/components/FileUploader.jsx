@@ -1,5 +1,7 @@
 import React from 'react';
-import uploadFile from '../images/upload-file.svg';
+// import uploadFile from '../images/upload-file.svg';
+import { green } from '@mui/material/colors';
+import Icon from '@mui/material/Icon';
 
 const FileUploader = props => {
   const hiddenFileInput = React.useRef(null);
@@ -14,8 +16,9 @@ const FileUploader = props => {
   };
   return (
     <>
-      <button className='absolute left-2' onClick={handleClick}>
-        <img className='w-6' src={uploadFile} alt='upload file' />
+      <button className='absolute top-1 left-1' onClick={handleClick}>
+        <Icon sx={{ color: green[500] }}>add_circle</Icon>
+        {/* <img className='w-6' src={uploadFile} alt='upload file' /> */}
       </button>
       <input
         type='file'
