@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/whatsapp-widget/static/css/main.4ed0840a.css",
-    "main.js": "/whatsapp-widget/static/js/main.8718be1b.js",
-    "static/media/upload-file.svg": "/whatsapp-widget/static/media/upload-file.05f219ceb84dd4c256be4f7c98a9b9c9.svg",
+    "main.css": "/whatsapp-widget/static/css/main.b3b4d3c6.css",
+    "main.js": "/whatsapp-widget/static/js/main.32cae694.js",
+    "static/media/enterIcon.svg": "/whatsapp-widget/static/media/enterIcon.fd579646967733527f194d7aa85503f6.svg",
     "static/media/logout-svgrepo-com.svg": "/whatsapp-widget/static/media/logout-svgrepo-com.b92ac1706961a6dc594930df99fcf31e.svg",
     "index.html": "/whatsapp-widget/index.html",
     "static/media/return-back.svg": "/whatsapp-widget/static/media/return-back.38fab4e4e440ffdbca8f7e098544dbdb.svg",
     "static/media/update-icon.svg": "/whatsapp-widget/static/media/update-icon.5d1ef08b6e4cc515260c66088e4aea87.svg",
-    "main.4ed0840a.css.map": "/whatsapp-widget/static/css/main.4ed0840a.css.map",
-    "main.8718be1b.js.map": "/whatsapp-widget/static/js/main.8718be1b.js.map"
+    "main.b3b4d3c6.css.map": "/whatsapp-widget/static/css/main.b3b4d3c6.css.map",
+    "main.32cae694.js.map": "/whatsapp-widget/static/js/main.32cae694.js.map"
   },
   "entrypoints": [
-    "static/css/main.4ed0840a.css",
-    "static/js/main.8718be1b.js"
+    "static/css/main.b3b4d3c6.css",
+    "static/js/main.32cae694.js"
   ]
 }
