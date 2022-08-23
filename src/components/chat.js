@@ -7,10 +7,12 @@ import SendIcon from '@mui/icons-material/Send';
 import updateIcon from '../images/update-icon.svg';
 import logOutIcon from '../images/logout-svgrepo-com.svg';
 import returnBackIcon from '../images/return-back.svg';
-import FileUploader from './FileUploader';
+
+import { green } from '@mui/material/colors';
+import Icon from '@mui/material/Icon';
 
 // const BASE_URL = 'https://whatsapp-widget.herokuapp.com/';
-const BASE_URL = 'http://localhost:8001/';
+const BASE_URL = 'http://localhost:8000/';
 
 export function Chat({ clientId, chatWindow }) {
   const [client, setClient] = useState('loading');
@@ -27,8 +29,13 @@ export function Chat({ clientId, chatWindow }) {
   console.log(clientId);
   console.log(chatWindow);
 
+  const hiddenFileInput = useRef(null);
+
+  const handleClick = event => {
+    hiddenFileInput.current.click();
+  };
+
   useEffect(() => {
-    // console.log(chatWindow);
     if (!chatWindow) {
       getChats();
     }
@@ -45,12 +52,6 @@ export function Chat({ clientId, chatWindow }) {
         getMessages(chatId);
       }
       getChats();
-      // if (messageEl) {
-      //   messageEl.current.addEventListener('DOMNodeInserted', event => {
-      //     const { currentTarget: target } = event;
-      //     target.scroll({ top: target.scrollHeight });
-      //   });
-      // }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatWindow, client, openChat]);
@@ -82,28 +83,30 @@ export function Chat({ clientId, chatWindow }) {
     if (chats.data.err === 'server error') {
       logOut();
     }
-    // console.log(chats.data.err);
     return setChats(chats.data);
   };
 
   const getMessages = async chatId => {
-    // console.log(chatId);
     const messages = await axios.get(
       `${BASE_URL}api/getmessages?client=${clientId}&chatId=${chatId}`
     );
     return setChatHistory(messages.data);
   };
 
-  const handleFile = async file => {
+  const handleFile = async event => {
+    const fileUploaded = event.target.files[0];
+    console.log('fileUploaded', fileUploaded);
+    const name = fileUploaded.name;
+
+    console.log(name);
+
     const send = await axios.get(
-      `${BASE_URL}api/sendmessage?client=${clientId}&number=${number}&message=${file}`
+      `${BASE_URL}api/sendmedia?client=${clientId}&number=${number}&message=${fileUploaded}`
     );
-    console.log('handleFile', send.data);
+    console.log('handleFile', send);
     return send.data;
   };
   const logOut = async () => {
-    // setShow(false);
-    // setClientInfo(false);
     await axios.get(`${BASE_URL}api/logout?client=${clientId}`);
     localStorage.removeItem('clientInfo');
     navigate('/');
@@ -131,15 +134,6 @@ export function Chat({ clientId, chatWindow }) {
               className='cursor-pointer hover:bg-gray-50 flex justify-center items-center w-10 h-10 bg-white rounded-lg border'>
               <img src={logOutIcon} alt='log out icon' className='w-6 ' />
             </button>
-            {/* <div className='cursor-pointer hover:bg-gray-50 flex justify-center items-center w-10 h-10 bg-white rounded-lg border'>
-              {svg1}
-            </div>
-            <div className='cursor-pointer hover:bg-gray-50 flex justify-center items-center w-10 h-10 bg-white rounded-lg border'>
-              {svg2}
-            </div>
-            <div className='cursor-pointer hover:bg-gray-50 flex justify-center items-center w-10 h-10 bg-white rounded-lg border'>
-              {svg3}
-            </div> */}
           </div>
         </div>
         <div className='flex'>
@@ -210,7 +204,17 @@ export function Chat({ clientId, chatWindow }) {
                   })}
               </div>
               <form onSubmit={e => postMessage(e)} className='flex relative items-center'>
-                <FileUploader handleFile={() => handleFile()} />
+                <div>
+                  <button className='absolute top-1 left-1' onClick={handleClick}>
+                    <Icon sx={{ color: green[500] }}>add_circle</Icon>
+                  </button>
+                  <input
+                    type='file'
+                    ref={hiddenFileInput}
+                    onChange={handleFile}
+                    style={{ display: 'none' }}
+                  />
+                </div>
 
                 <input
                   placeholder='Type some message ..'
@@ -226,11 +230,6 @@ export function Chat({ clientId, chatWindow }) {
                   sx={{ minWidth: 40, marginLeft: 1 }}
                   variant='contained'
                   endIcon={<SendIcon />}></Button>
-                {/* <button
-                  type='sumbit'
-                  className='px-2 py-1 bg-green-300 hover:bg-green-200 rounded-lg border-2 border-white'>
-                  Send
-                </button> */}
               </form>
             </div>
           </div>
